@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement; // Scenemanager 需要此API
-using System.Collections; // 協程需要此API
+using UnityEngine.SceneManagement;  // Scenemanager 需要此API
+using System.Collections;           // 協程需要此API
 
 #region 欄位
 public class MenuManager : MonoBehaviour
@@ -14,6 +14,9 @@ public class MenuManager : MonoBehaviour
     public Image imgLoading;         // 圖像使用 Image
     [Header("載入畫面")]
     public string nameScene = "遊戲場景";
+    [Header("提示文字")]
+    public GameObject tip;
+
 
     #endregion
 
@@ -43,9 +46,16 @@ public class MenuManager : MonoBehaviour
         // 當 尚未載入場景
         while (!ao.isDone)
         {
-            textLoading.text = ao.progress * 100 + "%"; // 更新文字
-            imgLoading.fillAmount = ao.progress;        // 更新進度條
-            yield return null;                          // 延遲一個影格時間
+            textLoading.text = (ao.progress/0.9f * 100).ToString("F1") + "%";   // 更新文字
+            imgLoading.fillAmount = ao.progress / 0.9f;                         // 更新進度條
+            yield return null;                                                  // 延遲一個影格時間
+
+            if (ao.progress == 0.9f)
+            {
+                tip.SetActive(true);
+
+                if (Input.anyKeyDown) ao.allowSceneActivation = true;
+            }
         }
     }
 
