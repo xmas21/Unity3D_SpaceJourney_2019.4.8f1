@@ -43,6 +43,8 @@ public class Player : MonoBehaviour
         Vector3 pos = transform.forward * v + transform.right * h ;    // 移動座標 = 角色.前方 * 前後 + 角色.右方 * 左右
         rig.MovePosition(transform.position + pos * speed);            // 移動座標 = 角色座標 + 移動座標
 
+        ani.SetFloat("移動", Mathf.Abs(v) + Mathf.Abs(h));             // 移動動畫(取絕對值)
+
     }
 
     private void Attack()
