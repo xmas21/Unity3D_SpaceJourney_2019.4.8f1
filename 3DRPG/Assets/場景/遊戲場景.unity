@@ -7468,7 +7468,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 118.5, y: 100}
-  m_SizeDelta: {x: 300, y: 70}
+  m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &668885051
 MonoBehaviour:
@@ -21528,6 +21528,8 @@ MonoBehaviour:
   paneldialog: {fileID: 666231118}
   textName: {fileID: 1385439153}
   textContent: {fileID: 668885051}
+  printSpeed: 0.1
+  soundPrint: {fileID: 8300000, guid: 6b05122e295c842459870fda41613a25, type: 3}
 --- !u!136 &8296172668912411482
 CapsuleCollider:
   m_ObjectHideFlags: 0
