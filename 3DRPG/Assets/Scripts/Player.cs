@@ -8,6 +8,12 @@ public class Player : MonoBehaviour
     [Header("旋轉速度"), Range(0, 100)]
     public float turn = 1;
 
+    /// <summary>
+    /// 停止不移動
+    /// </summary>
+    [HideInInspector]
+    public bool stop;
+
     private float attack;
     private float hp;
     private float mp;
@@ -17,6 +23,8 @@ public class Player : MonoBehaviour
     private Rigidbody rig;
     private Animator ani;
     private Transform cam;
+    private AudioSource aud;
+    private NPC npc;
 
     #endregion
 
@@ -26,14 +34,22 @@ public class Player : MonoBehaviour
     {
         rig = GetComponent<Rigidbody>();
         ani = GetComponent<Animator>();
+        aud = GetComponent<AudioSource>();
         cam = GameObject.Find("攝影機根目錄").transform;
+        npc = FindObjectOfType<NPC>();
     }
 
     private void FixedUpdate()
     {
+        if (stop) return;  // 如果 停止 跳出
+         
         Move();
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "骷髏頭") GetProp(collision.gameObject);
+    }
 
     #endregion 
 
@@ -69,9 +85,10 @@ public class Player : MonoBehaviour
 
     }
 
-    private void GerProp()
+    private void GetProp(GameObject prop)
     {
-
+        Destroy(prop);
+        npc.UpdateTextMission();       
     }
 
     private void Hit()
