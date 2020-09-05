@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -7,7 +8,13 @@ public class Player : MonoBehaviour
     public float speed = 1;
     [Header("旋轉速度"), Range(0, 100)]
     public float turn = 1;
+    [Header("傳送門")]
     public Transform[] doors;
+    [Header("介面區塊")]
+    public Image barHp;
+    public Image barMp;
+    public Image barExp;
+
 
     /// <summary>
     /// 停止不移動
@@ -16,10 +23,11 @@ public class Player : MonoBehaviour
     public bool stop;
 
     private float attack;
-    private float hp;
-    private float mp;
+    private float maxHp = 100;
+    private float hp = 100;
+    private float maxMp = 100;
     private float exp;
-    private int lv;
+    private int lv = 1;
 
     private Rigidbody rig;
     private Animator ani;
@@ -132,14 +140,22 @@ public class Player : MonoBehaviour
         npc.UpdateTextMission();
     }
 
-    private void Hit()
+    public void Hit(float damage, Transform direction)
     {
+        hp -= damage;
+        ani.SetTrigger("受傷觸發");
+        rig.AddForce(direction.forward * 100 + direction.up * 100);
 
+        hp = Mathf.Clamp(hp, 0, 99999);
+        barHp.fillAmount = hp / maxHp;
+
+        if (hp == 0) Dead();
     }
 
     private void Dead()
     {
-
+        ani.SetBool("死亡觸發", true);
+        enabled = false;
     }
 
     private void Exp()

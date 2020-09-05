@@ -15,11 +15,15 @@ public class Enemy : MonoBehaviour
     public float exp = 30;
     [Header("攻擊停止距離"), Range(0.1f, 3)]
     public float distanceAttack = 2.5f;
+    [Header("攻擊冷卻時間"), Range(0.1f, 5)]
+    public float cd = 4;
+    [Header("轉頭速度"), Range(0.1f, 50)]
+    public float turn = 5;
 
     private Transform player;
     private NavMeshAgent nav;
     private Animator ani;
-
+    private float timer;
 
 
 
@@ -29,19 +33,25 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
+        player = GameObject.Find("阿兜").transform;
+
         nav = GetComponent<NavMeshAgent>();
         ani = GetComponent<Animator>();
         nav.speed = speed;
         nav.stoppingDistance = distanceAttack;
 
-        player = GameObject.Find("阿兜").transform;
-
-
+        nav.SetDestination(player.position);
     }
 
     private void Update()
     {
         Move();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        float range = Random.Range(-20f, 20f);
+        if (other.name == "阿兜") other.GetComponent<Player>().Hit(attack + range,transform);
     }
 
     private void OnDrawGizmos()
@@ -60,7 +70,16 @@ public class Enemy : MonoBehaviour
 
     private void Attack()
     {
-        ani.SetTrigger("攻擊觸發");
+        Quaternion look = Quaternion.LookRotation(player.position - transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, look, Time.deltaTime * turn);
+
+        timer += Time.deltaTime;
+
+        if (timer >= cd)
+        {
+            timer = 0;
+            ani.SetTrigger("攻擊觸發");
+        }
     }
 
     #endregion
