@@ -4,6 +4,8 @@ using System.Collections;
 
 public class NPC : MonoBehaviour
 {
+    #region 欄位
+
     [Header("NPC 資料")]
     public NPCData data;
     [Header("對話區域")]
@@ -20,6 +22,8 @@ public class NPC : MonoBehaviour
     public RectTransform panelMission;
     [Header("任務數量")]
     public Text textMission;
+    [Header("傳送門")]
+    public GameObject[] doors;
 
     public int count;
 
@@ -27,13 +31,16 @@ public class NPC : MonoBehaviour
     private Animator ani;
     private Player player;
 
+    #endregion
+
+    #region 事件
     /// <summary>
     /// 更新任務文字介面
     /// </summary>
     public void UpdateTextMission()
     {
         count++;
-        textMission.text = count + " / " + data.count;
+        textMission.text ="骷髏頭數量 " + count + "/ " + data.count;
     }
 
     /// <summary>
@@ -81,6 +88,9 @@ public class NPC : MonoBehaviour
         Nomission();
     }
 
+    /// <summary>
+    /// 顯示任務
+    /// </summary>
     private IEnumerator ShowMission()
     {
         while (panelMission.anchoredPosition.x > 0)
@@ -90,6 +100,9 @@ public class NPC : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 動畫觸發(說話)
+    /// </summary>
     private void AnimationControl()
     {
         if (data._NPCState == NPCState.NoMission || data._NPCState == NPCState.Missioning)
@@ -98,6 +111,9 @@ public class NPC : MonoBehaviour
             ani.SetTrigger("謝謝觸發");
     }
 
+    /// <summary>
+    /// 沒任務階段
+    /// </summary>
     private void Nomission()
     {
         if (data._NPCState == NPCState.NoMission)
@@ -108,10 +124,18 @@ public class NPC : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 任務中階段
+    /// </summary>
     private void Missioning()
     {
         if (count >= data.count) data._NPCState = NPCState.Finish;
+
+        for (int i = 0; i < doors.Length; i++) doors[i].SetActive(true);
     }
+    #endregion
+
+    #region 方法
 
     private void Awake()
     {
@@ -133,4 +157,5 @@ public class NPC : MonoBehaviour
     {
         if (other.name == "阿兜")dialog();     
     }
+    #endregion
 }

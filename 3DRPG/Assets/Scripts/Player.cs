@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     public float speed = 1;
     [Header("旋轉速度"), Range(0, 100)]
     public float turn = 1;
+    public Transform[] doors;
 
     /// <summary>
     /// 停止不移動
@@ -30,6 +31,9 @@ public class Player : MonoBehaviour
 
     #region 事件
 
+    /// <summary>
+    /// 開局的事
+    /// </summary>
     private void Awake()
     {
         rig = GetComponent<Rigidbody>();
@@ -39,10 +43,47 @@ public class Player : MonoBehaviour
         npc = FindObjectOfType<NPC>();
     }
 
+    /// <summary>
+    /// 傳送門
+    /// </summary>
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.name == "傳送門 - NPC")
+        {
+            transform.position = doors[1].position;
+            doors[1].GetComponent<CapsuleCollider>().enabled = false;
+            Invoke("OpenDoorNPC", 4);
+
+        }
+
+        if (other.name == "傳送門 - BOSS")
+        {
+            transform.position = doors[0].position;
+            doors[0].GetComponent<CapsuleCollider>().enabled = false;
+            Invoke("OpenDoorBOSS", 4);
+        }
+    }
+
+    /// <summary>
+    /// 開啟NPC傳送門
+    /// </summary>
+    private void OpenDoorNPC()
+    {
+        doors[1].GetComponent<CapsuleCollider>().enabled = true;
+    }
+
+    /// <summary>
+    /// 開啟BOSS傳送門
+    /// </summary>
+    private void OpenDoorBOSS()
+    {
+        doors[0].GetComponent<CapsuleCollider>().enabled = true;
+    }
+
     private void FixedUpdate()
     {
         if (stop) return;  // 如果 停止 跳出
-         
+
         Move();
     }
 
@@ -88,7 +129,7 @@ public class Player : MonoBehaviour
     private void GetProp(GameObject prop)
     {
         Destroy(prop);
-        npc.UpdateTextMission();       
+        npc.UpdateTextMission();
     }
 
     private void Hit()
