@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
     public Image barHp;
     public Image barMp;
     public Image barExp;
+    [Header("流星雨")]
+    public Transform stone; 
 
 
     /// <summary>
@@ -22,13 +24,15 @@ public class Player : MonoBehaviour
     [HideInInspector]
     public bool stop;
 
-    private float attack;
+    public float attack = 100;
     private float maxHp = 100;
     private float hp = 100;
     private float maxMp = 100;
     private float exp;
     private int lv = 1;
 
+    [HideInInspector]
+    public float skillDamage = 200;
     private Rigidbody rig;
     private Animator ani;
     private Transform cam;
@@ -51,6 +55,12 @@ public class Player : MonoBehaviour
         npc = FindObjectOfType<NPC>();
     }
 
+    private void Update()
+    {
+        Attack();
+        Skill();
+    }
+
     /// <summary>
     /// 傳送門
     /// </summary>
@@ -69,6 +79,12 @@ public class Player : MonoBehaviour
             transform.position = doors[0].position;
             doors[0].GetComponent<CapsuleCollider>().enabled = false;
             Invoke("OpenDoorBOSS", 4);
+        }
+
+        if (other.tag == "石頭怪")
+        {
+            print("1");
+            other.GetComponent<Enemy>().Hit(attack, transform);
         }
     }
 
@@ -126,12 +142,19 @@ public class Player : MonoBehaviour
 
     private void Attack()
     {
-
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            ani.SetTrigger("攻擊觸發");
+        }
     }
 
     private void Skill()
     {
-
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Vector3 pos = transform.forward * 2 + transform.up * 5;
+            Instantiate(stone, transform.position + pos, transform.rotation);
+        }
     }
 
     private void GetProp(GameObject prop)

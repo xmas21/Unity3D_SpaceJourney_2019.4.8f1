@@ -19,11 +19,17 @@ public class Enemy : MonoBehaviour
     public float cd = 4;
     [Header("轉頭速度"), Range(0.1f, 50)]
     public float turn = 5;
+    [Header("骷髏頭")]
+    public Transform skull;
+    [Header("掉落機率"), Range(0f, 1f)]
+    public float skullProp = 0.6f;
 
     private Transform player;
     private NavMeshAgent nav;
     private Animator ani;
     private float timer;
+
+    private Rigidbody rig;
 
 
 
@@ -37,6 +43,7 @@ public class Enemy : MonoBehaviour
 
         nav = GetComponent<NavMeshAgent>();
         ani = GetComponent<Animator>();
+        rig = GetComponent<Rigidbody>();
         nav.speed = speed;
         nav.stoppingDistance = distanceAttack;
 
@@ -51,13 +58,21 @@ public class Enemy : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         float range = Random.Range(-20f, 20f);
-        if (other.name == "阿兜") other.GetComponent<Player>().Hit(attack + range,transform);
+        if (other.name == "阿兜") other.GetComponent<Player>().Hit(attack + range, transform);
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = new Color(1, 0, 0, 0.4f);
         Gizmos.DrawSphere(transform.position, distanceAttack);
+    }
+
+    private void OnParticleCollision(GameObject other)
+    {
+        if (other.name == "碎石")
+        {
+            Hit(player.GetComponent<Player>().skillDamage, player.transform);
+        }
     }
 
     private void Move()
@@ -68,6 +83,9 @@ public class Enemy : MonoBehaviour
         if (nav.remainingDistance < distanceAttack) Attack();
     }
 
+    /// <summary>
+    /// 怪物攻擊
+    /// </summary>
     private void Attack()
     {
         Quaternion look = Quaternion.LookRotation(player.position - transform.position);
@@ -80,6 +98,36 @@ public class Enemy : MonoBehaviour
             timer = 0;
             ani.SetTrigger("攻擊觸發");
         }
+    }
+
+    /// <summary>
+    /// 怪物受傷
+    /// </summary>
+    /// <param name="damage"></param>
+    /// <param name="direction"></param>
+    public void Hit(float damage, Transform direction)
+    {
+        hp -= damage;
+        ani.SetTrigger("受傷觸發");
+        rig.AddForce(direction.forward * 100 + direction.up * 100);
+
+        hp = Mathf.Clamp(hp, 0, 999);
+
+        if (hp == 0) Dead();
+    }
+
+    /// <summary>
+    /// 怪物死亡
+    /// </summary>
+    private void Dead()
+    {
+        GetComponent<CapsuleCollider>().enabled = false;
+        ani.SetBool("死亡觸發", true);
+        enabled = false;
+
+        float r = Random.Range(0f, 1f);
+
+        if (r <= skullProp) Instantiate(skull, transform.position + Vector3.up * 10, transform.rotation);
     }
 
     #endregion
