@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     public float attack = 40f;
     [Header("血量"), Range(200, 300)]
     public float hp = 200;
-    [Header("怪物的經驗值"), Range(30, 100)]
+    [Header("怪物的經驗值"), Range(30, 100000)]
     public float exp = 30;
     [Header("攻擊停止距離"), Range(0.1f, 3)]
     public float distanceAttack = 2.5f;
@@ -124,21 +124,15 @@ public class Enemy : MonoBehaviour
         GetComponent<CapsuleCollider>().enabled = false;
         ani.SetBool("死亡觸發", true);
         enabled = false;
+        nav.isStopped = true;
+        player.GetComponent<Player>().Exp(exp);
+
 
         float r = Random.Range(0f, 1f);
 
         if (r <= skullProp) Instantiate(skull, transform.position + Vector3.up * 10, transform.rotation);
+
     }
-
-    #endregion
-
-    #region 事件
-
-
-
-
-
-
 
     #endregion
 }

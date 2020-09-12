@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ed3f1272b79c4342b68667cf578f2c9, type: 3}
   m_Name: "NPC \u8CC7\u6599"
   m_EditorClassIdentifier: 
-  _NPCState: 0
+  _NPCState: 2
   count: 10
   dialogs:
   - "\u55E8!\u53EF\u4EE5\u5E6B\u6211\u53D6\u5F9710\u500B\u9AB7\u9ACF\u982D\u55CE?"
   - "\u963F\u5DF4\u963F\u5DF4\u963F\u5DF4\u963F\u5DF4"
-  - "\u7B97\u4F60\u53B2\u5BB3"
+  - "\u606D\u559C\u4F60\u5B8C\u6210\u4EFB\u52D9~~"

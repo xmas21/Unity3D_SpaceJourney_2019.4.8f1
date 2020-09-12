@@ -15,7 +15,9 @@ public class Player : MonoBehaviour
     public Image barMp;
     public Image barExp;
     [Header("流星雨")]
-    public Transform stone; 
+    public Transform stone;
+    public Text textLv;
+    public float[] exps = new float[99];
 
 
     /// <summary>
@@ -23,12 +25,16 @@ public class Player : MonoBehaviour
     /// </summary>
     [HideInInspector]
     public bool stop;
+    private float stoneCost = 10;
 
     public float attack = 100;
-    private float maxHp = 100;
     private float hp = 100;
+    private float maxHp = 100;
+    private float mp = 100;
     private float maxMp = 100;
+    private float restoreMp = 10;
     private float exp;
+    private float MaxExp = 100;
     private int lv = 1;
 
     [HideInInspector]
@@ -53,12 +59,15 @@ public class Player : MonoBehaviour
         aud = GetComponent<AudioSource>();
         cam = GameObject.Find("攝影機根目錄").transform;
         npc = FindObjectOfType<NPC>();
+
+        for (int i = 0; i < exps.Length; i++) exps[i] = 100 * (i + 1);
     }
 
     private void Update()
     {
         Attack();
         Skill();
+        RestoreMp();
     }
 
     /// <summary>
@@ -152,8 +161,13 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            Vector3 pos = transform.forward * 2 + transform.up * 5;
-            Instantiate(stone, transform.position + pos, transform.rotation);
+            if (stoneCost <= mp)
+            {
+                mp -= stoneCost;
+                barMp.fillAmount = mp / maxMp;
+                Vector3 pos = transform.forward * 2 + transform.up * 5;
+                Instantiate(stone, transform.position + pos, transform.rotation);
+            }
         }
     }
 
@@ -175,15 +189,47 @@ public class Player : MonoBehaviour
         if (hp == 0) Dead();
     }
 
+
     private void Dead()
     {
         ani.SetBool("死亡觸發", true);
         enabled = false;
     }
 
-    private void Exp()
+    public void Exp(float getExp)
     {
+        exp += getExp;
+        barExp.fillAmount = exp / MaxExp;
 
+        while (exp >= MaxExp) LevelUp();
+    }
+
+    private void LevelUp()
+    {
+        lv++;
+        maxHp += 20;
+        maxMp += 10;
+        attack += 10;
+        skillDamage += 10;
+
+        hp = maxHp;
+        mp = maxMp;
+        exp -= MaxExp;
+
+        MaxExp = exps[lv - 1];
+
+        barHp.fillAmount = 1;
+        barMp.fillAmount = 1;
+        barExp.fillAmount = exp / MaxExp;
+        textLv.text = "Lv" + lv;
+
+    }
+
+    private void RestoreMp()
+    {
+        mp += restoreMp * Time.deltaTime;
+        mp = Mathf.Clamp(mp, 0, maxMp);
+        barMp.fillAmount = mp / maxMp;
     }
 
     #endregion

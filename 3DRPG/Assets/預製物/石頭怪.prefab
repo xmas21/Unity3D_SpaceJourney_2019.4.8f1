@@ -378,7 +378,7 @@ MonoBehaviour:
   speed: 2
   attack: 40
   hp: 200
-  exp: 30
+  exp: 999
   distanceAttack: 2.5
   cd: 4
   turn: 5
