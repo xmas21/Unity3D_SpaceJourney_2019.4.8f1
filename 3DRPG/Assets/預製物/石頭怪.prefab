@@ -307,7 +307,7 @@ Transform:
   m_GameObject: {fileID: 6948659043337523046}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.2233647, y: -9.13783, z: -51.970024}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_Children:
   - {fileID: 6948659043338015566}
   - {fileID: 6948659043338015582}
@@ -383,7 +383,7 @@ MonoBehaviour:
   cd: 4
   turn: 5
   skull: {fileID: 2085992260592307712, guid: b3b05eff030889346ae25794d3a03a69, type: 3}
-  skullProp: 0.6
+  skullProp: 0.8
 --- !u!195 &6948659043100962679
 NavMeshAgent:
   m_ObjectHideFlags: 0

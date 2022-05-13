@@ -189,7 +189,6 @@ public class Player : MonoBehaviour
         if (hp == 0) Dead();
     }
 
-
     private void Dead()
     {
         ani.SetBool("死亡觸發", true);

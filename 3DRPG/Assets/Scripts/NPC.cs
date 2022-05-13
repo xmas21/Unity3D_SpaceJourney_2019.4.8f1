@@ -26,6 +26,7 @@ public class NPC : MonoBehaviour
     public GameObject[] doors;
 
     public int count;
+    public bool missionComplete;
 
     private AudioSource aud;
     private Animator ani;
@@ -39,8 +40,13 @@ public class NPC : MonoBehaviour
     /// </summary>
     public void UpdateTextMission()
     {
+        if (missionComplete) return;
+
         count++;
-        textMission.text ="骷髏頭數量 " + count + "/ " + data.count;
+
+        textMission.text = "骷髏頭數量 " + count + "/ " + data.count;
+
+        if (count == 10) missionComplete = true;
     }
 
     /// <summary>
@@ -155,7 +161,7 @@ public class NPC : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.name == "阿兜")dialog();     
+        if (other.name == "阿兜") dialog();
     }
     #endregion
 }

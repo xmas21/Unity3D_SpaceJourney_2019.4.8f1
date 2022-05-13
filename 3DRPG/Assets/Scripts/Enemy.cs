@@ -127,11 +127,11 @@ public class Enemy : MonoBehaviour
         nav.isStopped = true;
         player.GetComponent<Player>().Exp(exp);
 
-
         float r = Random.Range(0f, 1f);
 
         if (r <= skullProp) Instantiate(skull, transform.position + Vector3.up * 10, transform.rotation);
 
+        Destroy(gameObject, 1f);
     }
 
     #endregion
