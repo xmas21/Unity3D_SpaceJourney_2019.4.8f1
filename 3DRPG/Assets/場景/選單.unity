@@ -922,7 +922,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\xA9MN 2020. version 1.0 ( \xB4(00)`)"
+  m_Text: "\xA9Lerbo 2020. version 1.0"
 --- !u!222 &1066691749
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1697,7 +1697,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u963F\u515C\u4E4B\u6230"
+  m_Text: "\u661F\u969B\u65C5\u7A0B"
 --- !u!222 &2027276635
 CanvasRenderer:
   m_ObjectHideFlags: 0
